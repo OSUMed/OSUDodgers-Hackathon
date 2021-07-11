@@ -1,0 +1,90 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+div.game {
+  width: 100%;
+  margin: 2vh 0 0 0;
+  height: 100%;
+  position: absolute;
+  z-index: 0
+}
+
+img.villain {
+  width: 5vw;
+  height: 7vh;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+div.counter {
+  margin: 0;
+  color: #394045;
+  font-weight: 400;
+  z-index: 6000
+}
+
+.animate {
+  animation: bullet 500ms;
+}
+
+img.block {
+  width: 5vw;
+  height: 7vh;
+  top: 0;
+  left: 0;
+  position: relative;
+  margin-top: 5vh;
+}
+
+@keyframes move {
+  0% {
+    top: 9.7vh;
+  }
+
+  50% {
+    top: 2vh;
+  }
+  70% {
+    top: 2vh;
+  }
+  100% {
+    top: 9.7vh;
+  }
+}
+
+@keyframes bullet {
+  0% {
+    right: -1vw;
+  }
+  100% {
+    right: 500vw;
+  }
+}
+
+/* @media (min-width: 1511px) {
+  div.game {
+    width: 14vw;
+  }
+}
+
+@media(min-width: 1670px) {
+  div.game{ 
+    width: 14vw;
+  }
+}
+
+@media (min-width: 1680px) {
+  div.game {
+    width: 13vw;
+  }
+}
+
+
+@media (width: 1700px) {
+  div.game {
+    width: 14.3vw
+  }
+} */
