@@ -17,9 +17,10 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-// app.get('/', (req, res) => {
-//     console.log("I did it!")
-// });
+app.get('/', (req, res) => {
+  res.send("Hi!")
+    console.log("I did it!")
+});
 
 
 app.get('/api/get', (req, res) => {
@@ -27,9 +28,9 @@ app.get('/api/get', (req, res) => {
     db.query(sqlInsert, (err, result)=> {
         console.log(result)
         res.send(result)
-        
+
     })
-    
+
 });
 
 
@@ -39,7 +40,7 @@ app.post('/api/post', (req, res)=> {
     const playerName = req.body.player_name;
     const playerScore = req.body.player_score;
 
-    const sqlInsert = "INSERT INTO Top_Records (player_name, player_score) VALUES (?, ?);" 
+    const sqlInsert = "INSERT INTO Top_Records (player_name, player_score) VALUES (?, ?);"
     db.query(sqlInsert, [playerName, playerScore], (err, result)=> {
         console.log(result);
     })

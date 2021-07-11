@@ -19,6 +19,15 @@ img.villain {
   left: 0;
 }
 
+img.sprite {
+  width: 5vw;
+  height: 5vh;
+  margin-left: 8vw;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
 div.counter {
   margin: 0;
   color: #394045;
@@ -62,6 +71,18 @@ img.block {
   100% {
     right: 500vw;
   }
+}
+
+@keyframes hayBale {
+  0%{
+    right: -1vw;
+    display: block;
+  }
+  100%{
+    right: 200vw;
+    display: none;
+  }
+
 }
 
 /* @media (min-width: 1511px) {

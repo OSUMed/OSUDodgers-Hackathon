@@ -3,17 +3,30 @@ import { Container, Button, Image, Ref } from 'semantic-ui-react';
 
 import './villain.css';
 import Villain_1 from './RedneckVillain.png';
-import block_1 from './Villain.jpeg';
-import bullet_1 from './Bullet.png';
+// import block_1 from './Villain.jpeg';
+import bullet_1 from './HayRoll.png';
 import bullet_tail_1 from './bulletTail.png';
+import sprite from './Running2.png';
+import spriteUpDown from './UpDown.png';
+import spriteRunning1 from './Running1.png';
+import hay_bale_1 from './HayBale.png';
+import hay_roll_1 from './Shrub.png';
+
+/*tslint:disabled*/
+
+// function move() {
+//   window.requestAnimationFrame(move);
+// }
 
 export default class Villain extends React.Component {
   constructor(props) {
     super(props);
 
     this.villainRef = React.createRef();
-    this.blockRef = React.createRef();
+    this.spriteRef = React.createRef();
     this.bulletRef = React.createRef();
+    this.canvasRef = React.createRef();
+    this.hayBaleRef = React.createRef();
 
     this.state = {
       animation: 'block 2s linear infinite',
@@ -28,8 +41,17 @@ export default class Villain extends React.Component {
       position: 10,
       marginTop: 10,
       bulletTop: 0,
-      firing: false
+      firing: false,
+      hbTop: 10,
+      sprite: sprite,
+      hbRight: 100,
+      hbDisplay: 'none',
+      hbActive: false,
+      display: 'Start game?',
     };
+
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +61,56 @@ export default class Villain extends React.Component {
     setTimeout(() => {
       this.setState({ visible: true });
     }, 500);
+
+    document.addEventListener('keydown', this.handleKeyPress, false);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress(event) {
+    const sprite_1 = this.spriteRef.current;
+
+    if (this.state.started === true) {
+      if (event.key === 'w') {
+        this.setState({
+          position: this.state.position - 1,
+          sprite: spriteUpDown,
+        });
+      } else if (event.key === 's') {
+        this.setState({
+          position: this.state.position + 1,
+          sprite: spriteUpDown,
+        });
+      } else if (event.key === 'd') {
+        this.setState({
+          sprite: spriteRunning1,
+          score: this.state.score + 1,
+          display: this.state.score,
+        });
+      }
+    }
+  }
+
+  handleKeyUp() {
+    this.setState({
+      sprite: sprite,
+    });
+  }
+
+  fireHayBale() {
+    const hay_bale_1 = this.hayBaleRef.current;
+    
+    
+    hay_bale_1.style.animation = 'hayBale 10s linear infinite';
+
+    setInterval(()=> {
+      this.setState({
+        hbTop: Math.random() * 10
+      })
+    }, 15000)
   }
 
   startingGame() {
@@ -62,67 +134,53 @@ export default class Villain extends React.Component {
       started: true,
     });
 
-    const block = this.blockRef.current;
-    console.log(block.style);
-
     this.move();
-
-    setInterval(() => {
-      this.setState({
-        position: Math.ceil(Math.random() * 10),
-      });
-
-      block.style.marginTop = `${this.state.position}vh`;
-    }, 1000);
-
-    // villain.style.marginTop = `${block.style.marginTop}`
+    this.fireHayBale();
   }
 
   move = () => {
-
     setInterval(() => {
       if (this.state.position > this.state.marginTop) {
         this.setState({
           marginTop: this.state.marginTop + 1,
-          bulletTailDisplay: 'none'
         });
       }
 
       if (this.state.position < this.state.marginTop) {
         this.setState({
           marginTop: this.state.marginTop - 1,
-          bulletTailDisplay: 'none'
         });
       }
-    }, 95);
+    }, 900);
 
     setInterval(() => {
-      if (this.state.position === this.state.marginTop && this.state.firing === false) {
-          this.fire(this.state.marginTop)
-          this.setState({bulletTailDisplay: 'block'})
-      } 
-    }, 10);
+      if (
+        this.state.position === this.state.marginTop &&
+        this.state.firing === false
+      ) {
+        this.fire(this.state.marginTop);
+      }
+    }, 900);
   };
 
-  fire = (bulletTop) => {
+  fire = bulletTop => {
     const bullet = this.bulletRef.current;
 
-    bullet.style.animation = 'bullet 10000ms linear'
+    bullet.style.animation = 'bullet 15s linear';
     this.setState({
       bulletTop: bulletTop,
       bulletDisplay: 'block',
       bulletTailDisplay: 'none',
-      firing: true
-    })
+      firing: true,
+    });
 
     setInterval(() => {
       this.setState({
         bulletDisplay: 'none',
-        firing: false
-      })
-    },10000)
-    
-  }
+        firing: false,
+      });
+    }, 15000);
+  };
 
   handleYesclick() {
     this.startingGame();
@@ -173,21 +231,24 @@ export default class Villain extends React.Component {
             size="small"
           />
         </Ref>
-        {/* <Ref innerRef={this.blockRef}>
+        <Ref innerRef={this.spriteRef}>
           <Image
-            className="block"
-            src={block_1}
-            alt="block"
+            src={`${this.state.sprite}`}
             floated="left"
-            size="small"
+            className="sprite"
+            style={{
+              marginTop: `${this.state.position}vh`,
+            }}
           />
-        </Ref> */}
+        </Ref>
         <Ref innerRef={this.bulletRef}>
           <Image
             style={{
-              marginTop: `${this.state.bulletTop + 0.83}vh`,
+              marginTop: `${this.state.bulletTop + 3.4}vh`,
               marginRight: '-2vw',
               display: `${this.state.bulletDisplay}`,
+              height: '1.45vh',
+              width: '2.75vw'
             }}
             src={bullet_1}
             alt="bullet"
@@ -205,7 +266,18 @@ export default class Villain extends React.Component {
             src={bullet_tail_1}
             alt="bullet tail"
             floated="right"
-            size="tiny"
+            size="mini"
+          />
+        </Ref>
+        <Ref innerRef={this.hayBaleRef}>
+          <Image
+            src={hay_roll_1}
+            size="mini"
+            style={{
+              marginTop: `${this.state.hbTop}vh`,
+              marginLeft: `${this.state.hbRight}vh`,
+              display: `${this.state.hbDisplay}vh`,
+            }}
           />
         </Ref>
       </Container>
