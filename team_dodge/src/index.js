@@ -7,7 +7,7 @@ import 'semantic-ui-css/semantic.min.css'
 ReactDOM.render(
   <React.StrictMode>
     <Villain />
-    <Character />
+    {/* <Character /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
